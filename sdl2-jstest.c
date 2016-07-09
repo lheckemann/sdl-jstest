@@ -447,13 +447,27 @@ void event_joystick(int joy_idx)
       switch(event.type)
       {
         case SDL_JOYAXISMOTION:
+          if (event.jaxis.axis >= 9) break;
           printf("SDL_JOYAXISMOTION: joystick: %d axis: %d value: %d\n",
                  event.jaxis.which, event.jaxis.axis, event.jaxis.value);
+          printf("Key: %d\n", 
+              (
+               (event.jaxis.which & 15) << 12)
+             | ((event.jaxis.axis & 127) << 1)
+             + (event.jaxis.value > 0 ? 1 : 0)
+          );
           break;
 
         case SDL_JOYBUTTONDOWN:
           printf("SDL_JOYBUTTONDOWN: joystick: %d button: %d state: %d\n",
                  event.jbutton.which, event.jbutton.button, event.jbutton.state);
+          printf("Key: %d\n",
+              (
+                ((event.jbutton.which & 15) << 12)
+              | (2<<8)
+              | (event.jbutton.button & 255)
+              )
+          );
           break;
 
         case SDL_JOYBUTTONUP:
